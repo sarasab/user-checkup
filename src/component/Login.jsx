@@ -11,20 +11,30 @@ class Login extends Component {
     }
     async componentDidMount() {
         try {
-            const result = await fetch('https://jsonplaceholder.typicode.com/users');
+            const result = await fetch('https://jsonplaceholder.typicode.com/users');            
             console.log(result);
             const result_JSON = await result.json();
+            this.setState({userList:result_JSON})
+            this.setState({userName:result_JSON}) 
+            this.setState({Password:result_JSON})         
 
-            result_JSON.map(user =>
-                this.setState({
-                    userList: [...this.state.userList, { username: user.username, password: user.address.city }]
-
-                }))
-            console.log(this.state.userList);
+               console.log(this.state.userList);
         } catch (error) {
             console.log(error);
-        }
+        }   
+         
     }
+    handleClick = () => {     
+        
+        if (this.state.userName !== this.state.userList) {
+          console.log('Username incorrect')
+        } else if (this.state.PassWord!== this.userList.adress.city){
+            console.log('PassWord incorrect')
+        }else{
+            {this.props.history.push('/userList')}
+        }
+      } 
+
 
     render() {
 
@@ -36,6 +46,7 @@ class Login extends Component {
                 <div className="col">
                     <input type="text" className="form-control border-dark" placeholder="PassWord" aria-label="Last name" />
                 </div>
+                <button onClick={this.handleClick}>Valider</button>
             </div>
 
         )
