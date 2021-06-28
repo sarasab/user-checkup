@@ -5,35 +5,51 @@ class Login extends Component {
         super(props)
         this.state = {
             userName: '',
-            PassWord: '',
+            passWord: '',
             userList: [],
         }
+        this.handleClick = this.handleClick.bind(this);
     }
     async componentDidMount() {
         try {
-            const result = await fetch('https://jsonplaceholder.typicode.com/users');            
+            const result = await fetch('https://jsonplaceholder.typicode.com/users');
             console.log(result);
             const result_JSON = await result.json();
-            this.setState({userList:result_JSON})
-            this.setState({userName:result_JSON}) 
-            this.setState({Password:result_JSON})         
+            this.setState({ userList: result_JSON })
 
-               console.log(this.state.userList);
+            console.log(this.state.userList);
         } catch (error) {
             console.log(error);
-        }   
-         
-    }
-    handleClick = () => {     
-        
-        if (this.state.userName !== this.state.userList) {
-          console.log('Username incorrect')
-        } else if (this.state.PassWord!== this.userList.adress.city){
-            console.log('PassWord incorrect')
-        }else{
-            {this.props.history.push('/userList')}
         }
-      } 
+
+    }
+    onUserNameChange = (e) => {
+        this.setState({ userName: e.target.value })
+
+    }
+
+    onPassWordChange = (e) => {
+        this.setState({ passWord: e.target.value })
+    }
+
+
+    handleClick = () => {
+        const { userList } = this.state
+        for (let index = 0; index < userList.length; index++) {
+            const element = userList[index]
+            console.log(element.username, this.state.userName)
+            console.log(element.address.city, this.state.passWord)
+            if (element.username === this.state.userName && element.address.city === this.state.passWord) {
+                this.props.setUser({ username: this.state.userName })
+                this.props.history.push("/userList")
+
+                console.log('yeahh!!')
+                return;
+            }
+        };
+
+        console.log('Username/password incorrect')
+    }
 
 
     render() {
@@ -41,10 +57,10 @@ class Login extends Component {
         return (
             <div className="row">
                 <div className="col">
-                    <input type="text" className="form-control border-dark " placeholder=" userName" aria-label="First name" />
+                    <input onChange={this.onUserNameChange} value={this.state.userName} type="text" className="form-control border-dark " placeholder=" userName" aria-label="First name" />
                 </div>
                 <div className="col">
-                    <input type="text" className="form-control border-dark" placeholder="PassWord" aria-label="Last name" />
+                    <input onChange={this.onPassWordChange} value={this.state.passWord} type="text" className="form-control border-dark" placeholder="PassWord" aria-label="Last name" />
                 </div>
                 <button onClick={this.handleClick}>Valider</button>
             </div>
